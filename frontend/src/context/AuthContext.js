@@ -8,11 +8,11 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const register = useCallback(async (email, password) => {
+  const register = useCallback(async (name, email, password) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post('/auth/register', { email, password });
+      const response = await api.post('/auth/register', { name, email, password });
       localStorage.setItem('token', response.data.token);
       setUser(response.data.user);
       return response.data;

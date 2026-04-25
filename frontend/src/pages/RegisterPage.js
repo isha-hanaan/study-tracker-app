@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import '../styles/auth.css';
 
 export default function RegisterPage() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -21,7 +22,7 @@ export default function RegisterPage() {
     }
 
     try {
-      await register(email, password);
+      await register(name, email, password);
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
@@ -33,6 +34,18 @@ export default function RegisterPage() {
       <div className="auth-card">
         <h1>Create Account</h1>
         <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              disabled={loading}
+            />
+          </div>
+
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
