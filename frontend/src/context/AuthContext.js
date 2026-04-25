@@ -1,4 +1,4 @@
-import React, { createContext, useState, useCallback } from 'react';
+import React, { createContext, useState, useCallback, useEffect } from 'react';
 import api from '../services/api';
 
 export const AuthContext = createContext();
@@ -60,6 +60,10 @@ export const AuthProvider = ({ children }) => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   return (
     <AuthContext.Provider
