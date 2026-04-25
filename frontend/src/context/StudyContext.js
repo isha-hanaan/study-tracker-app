@@ -14,25 +14,43 @@ export const StudyProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   // Plan actions
-  const createPlan = useCallback(async (weekStartDate, subjects, goals) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await api.post('/plans', {
-        weekStartDate,
-        subjects,
-        goals
-      });
-      setPlans(prev => [response.data, ...prev]);
-      return response.data;
-    } catch (err) {
-      const errorMsg = err.response?.data?.message || 'Failed to create plan';
-      setError(errorMsg);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+const createPlan = useCallback(async (weekStartDate, subjects, goals) => {
+  setLoading(true);
+  setError(null);
+
+  try {
+    const start = new Date(weekStartDate);
+
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+
+    const payload = {
+      title: `Week Plan ${start.toDateString()}`, // REQUIRED
+      startDate: start.toISOString(),             // REQUIRED
+      endDate: end.toISOString(),                 // REQUIRED
+      subjects,
+      goals
+    };
+
+    const response = await api.post('/plans', payload);
+
+    setPlans(prev => [response.data, ...prev]);
+
+    return response.data;
+  } catch (err) {
+    console.log("CREATE PLAN ERROR:", err.response?.data); // 👈 DEBUG LINE
+
+    const errorMsg =
+      err.response?.data?.message ||
+      JSON.stringify(err.response?.data?.errors) ||
+      'Failed to create plan';
+
+    setError(errorMsg);
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   const getPlans = useCallback(async () => {
     setLoading(true);
@@ -50,20 +68,22 @@ export const StudyProvider = ({ children }) => {
     }
   }, []);
 
-  const getPlan = useCallback(async (planId) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await api.get(`/plans/${planId}`);
-      return response.data;
-    } catch (err) {
-      const errorMsg = err.response?.data?.message || 'Failed to fetch plan';
-      setError(errorMsg);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+const getPlan = useCallback(async () => {
+  setLoading(true);
+  setError(null);
+
+  try {
+    const response = await api.get('/plans');
+    setPlans(response.data);   // 👈 THIS WAS MISSING USEFULLY
+    return response.data;
+  } catch (err) {
+    const errorMsg = err.response?.data?.message || 'Failed to fetch plans';
+    setError(errorMsg);
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   const updatePlan = useCallback(async (planId, data) => {
     setLoading(true);

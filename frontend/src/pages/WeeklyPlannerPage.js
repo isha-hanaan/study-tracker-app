@@ -4,41 +4,64 @@ import TaskTrackerPanel from '../components/TaskTrackerPanel';
 import '../styles/planner.css';
 
 export default function WeeklyPlannerPage() {
-  const [weekStartDate, setWeekStartDate] = useState(
+  const [title, setTitle] = useState('');
+  const [startDate, setStartDate] = useState(
     new Date().toISOString().split('T')[0]
   );
   const [subjects, setSubjects] = useState('');
   const [goals, setGoals] = useState('');
   const [currentPlan, setCurrentPlan] = useState(null);
+
   const {
     plans,
     createPlan,
-    getPlan,
     getTasks,
     loading
   } = useContext(StudyContext);
 
+  // 🔥 auto calculate end date (7 days)
+  const calculateEndDate = (start) => {
+    const date = new Date(start);
+    date.setDate(date.getDate() + 6);
+    return date.toISOString().split('T')[0];
+  };
+
   useEffect(() => {
     const findPlan = plans.find(p => {
-      const start = new Date(p.weekStartDate).toISOString().split('T')[0];
-      const end = new Date(p.weekEndDate).toISOString().split('T')[0];
-      return weekStartDate >= start && weekStartDate <= end;
+      const start = new Date(p.startDate).toISOString().split('T')[0];
+      const end = new Date(p.endDate).toISOString().split('T')[0];
+      return startDate >= start && startDate <= end;
     });
+
     if (findPlan) {
       setCurrentPlan(findPlan);
     }
-  }, [weekStartDate, plans]);
+  }, [startDate, plans]);
 
   const handleCreatePlan = async (e) => {
     e.preventDefault();
-    const subjectList = subjects.split(',').map(s => s.trim()).filter(s => s);
-    const goalList = goals.split(',').map(g => g.trim()).filter(g => g);
+
+    const subjectList = subjects.split(',').map(s => s.trim()).filter(Boolean);
+    const goalList = goals.split(',').map(g => g.trim()).filter(Boolean);
+
+    const planData = {
+      title,
+      startDate,
+      endDate: calculateEndDate(startDate),
+      subjects: subjectList,
+      goals: goalList
+    };
+
+    console.log('Sending:', planData);
 
     try {
-      await createPlan(weekStartDate, subjectList, goalList);
+      await createPlan(planData);
       getTasks();
+      setTitle('');
+      setSubjects('');
+      setGoals('');
     } catch (err) {
-      console.error('Failed to create plan:', err);
+      console.error('Failed to create plan:', err.response?.data);
     }
   };
 
@@ -49,44 +72,54 @@ export default function WeeklyPlannerPage() {
       <div className="planner-section">
         <div className="plan-form">
           <h2>Create Week Plan</h2>
+
           <form onSubmit={handleCreatePlan}>
+            {/* 🔥 TITLE */}
             <div className="form-group">
-              <label htmlFor="weekStart">Week Starting</label>
+              <label>Plan Title</label>
               <input
-                id="weekStart"
-                type="date"
-                value={weekStartDate}
-                onChange={(e) => setWeekStartDate(e.target.value)}
+                type="text"
+                placeholder="Week 1 Study Plan"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 required
-                disabled={loading}
               />
             </div>
 
+            {/* 🔥 START DATE */}
             <div className="form-group">
-              <label htmlFor="subjects">Subjects (comma-separated)</label>
+              <label>Week Starting</label>
               <input
-                id="subjects"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                required
+              />
+            </div>
+
+            {/* SUBJECTS */}
+            <div className="form-group">
+              <label>Subjects</label>
+              <input
                 type="text"
-                placeholder="Math, Physics, English"
+                placeholder="Math, Physics"
                 value={subjects}
                 onChange={(e) => setSubjects(e.target.value)}
-                disabled={loading}
               />
             </div>
 
+            {/* GOALS */}
             <div className="form-group">
-              <label htmlFor="goals">Goals (comma-separated)</label>
+              <label>Goals</label>
               <input
-                id="goals"
                 type="text"
-                placeholder="Complete Chapter 5, Practice problems"
+                placeholder="Finish Chapter 3"
                 value={goals}
                 onChange={(e) => setGoals(e.target.value)}
-                disabled={loading}
               />
             </div>
 
-            <button type="submit" className="btn btn-primary" disabled={loading}>
+            <button type="submit" disabled={loading}>
               {loading ? 'Creating...' : 'Create Plan'}
             </button>
           </form>
@@ -95,27 +128,15 @@ export default function WeeklyPlannerPage() {
         {currentPlan && (
           <div className="plan-info">
             <h3>Current Plan</h3>
+
             <p>
-              <strong>Week:</strong>{' '}
-              {new Date(currentPlan.weekStartDate).toLocaleDateString()} -{' '}
-              {new Date(currentPlan.weekEndDate).toLocaleDateString()}
+              <strong>{currentPlan.title}</strong>
             </p>
-            <div>
-              <strong>Subjects:</strong>
-              <ul>
-                {currentPlan.subjects.map((s, i) => (
-                  <li key={i}>{s}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <strong>Goals:</strong>
-              <ul>
-                {currentPlan.goals.map((g, i) => (
-                  <li key={i}>{g}</li>
-                ))}
-              </ul>
-            </div>
+
+            <p>
+              {new Date(currentPlan.startDate).toLocaleDateString()} -{' '}
+              {new Date(currentPlan.endDate).toLocaleDateString()}
+            </p>
 
             <TaskTrackerPanel planId={currentPlan._id} />
           </div>
