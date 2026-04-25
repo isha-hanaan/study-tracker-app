@@ -1,0 +1,140 @@
+h1 {
+  margin-bottom: 2rem;
+  color: var(--text-primary);
+}
+
+h2 {
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.5rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-card h3 {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.stat-card.wide {
+  grid-column: 1 / -1;
+  text-align: left;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: white;
+  transition: width 0.3s;
+}
+
+.priority-section,
+.subject-section {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.priority-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.priority-card {
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  color: white;
+}
+
+.priority-high {
+  background: linear-gradient(135deg, #F44336 0%, #D32F2F 100%);
+}
+
+.priority-medium {
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+}
+
+.priority-low {
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+}
+
+.priority-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.priority-card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.subject-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.subject-item {
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--light-gray);
+}
+
+.subject-item h4 {
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+}
+
+.subject-item p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-card.wide {
+    grid-column: 1 / -1;
+  }
+}
