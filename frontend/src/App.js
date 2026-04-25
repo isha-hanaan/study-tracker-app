@@ -1,22 +1,21 @@
-import React, { useEffect, useContext } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AuthContext, AuthProvider } from './context/AuthContext';
 import { StudyProvider } from './context/StudyContext';
+
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import WeeklyPlannerPage from './pages/WeeklyPlannerPage';
 import ProgressReportPage from './pages/ProgressReportPage';
+
 import './styles/app.css';
 
 function AppRoutes() {
-  const { user, checkAuth } = useContext(AuthContext);
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  const { user, authChecked } = useContext(AuthContext);
 
   const ProtectedRoute = ({ children }) => {
+    if (!authChecked) return <div>Loading...</div>;
     return user ? children : <Navigate to="/login" />;
   };
 
@@ -24,6 +23,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+
       <Route
         path="/dashboard"
         element={
@@ -32,6 +32,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/planner"
         element={
@@ -40,6 +41,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/progress"
         element={
@@ -48,8 +50,27 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
       <Route path="/" element={<Navigate to="/dashboard" />} />
     </Routes>
+  );
+}
+
+function Navigation() {
+  const { user, logout } = useContext(AuthContext);
+
+  if (!user) return null;
+
+  return (
+    <div className="nav-links">
+      <Link to="/dashboard">Dashboard</Link>
+      <Link to="/planner">Planner</Link>
+      <Link to="/progress">Progress</Link>
+
+      <button onClick={logout} className="btn-logout">
+        Logout
+      </button>
+    </div>
   );
 }
 
@@ -65,6 +86,7 @@ export default function App() {
                 <Navigation />
               </div>
             </nav>
+
             <main className="app-main">
               <AppRoutes />
             </main>
@@ -72,22 +94,5 @@ export default function App() {
         </StudyProvider>
       </AuthProvider>
     </BrowserRouter>
-  );
-}
-
-function Navigation() {
-  const { user, logout } = useContext(AuthContext);
-
-  if (!user) return null;
-
-  return (
-    <div className="nav-links">
-      <a href="/dashboard">Dashboard</a>
-      <a href="/planner">Planner</a>
-      <a href="/progress">Progress</a>
-      <button onClick={logout} className="btn-logout">
-        Logout
-      </button>
-    </div>
   );
 }

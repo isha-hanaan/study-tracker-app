@@ -8,6 +8,9 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // 👇 NEW: track if auth check is done
+  const [authChecked, setAuthChecked] = useState(false);
+
   const register = useCallback(async (name, email, password) => {
     setLoading(true);
     setError(null);
@@ -50,6 +53,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = useCallback(async () => {
     const token = localStorage.getItem('token');
+
     if (token) {
       try {
         const response = await api.get('/auth/me');
@@ -59,6 +63,9 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
       }
     }
+
+    // 👇 VERY IMPORTANT
+    setAuthChecked(true);
   }, []);
 
   useEffect(() => {
@@ -67,7 +74,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, error, register, login, logout, checkAuth }}
+      value={{ user, loading, error, register, login, logout, checkAuth, authChecked }}
     >
       {children}
     </AuthContext.Provider>
