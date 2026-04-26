@@ -46,7 +46,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        REACT_APP_API_URL: http://localhost:5000/api
+        REACT_APP_API_URL: /api
     container_name: study-tracker-frontend
     ports:
       - "3000:80"

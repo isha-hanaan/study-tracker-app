@@ -25,7 +25,8 @@ class AuthController {
     res.status(200).json({
       user: {
         id: req.user._id,
-        email: req.user.email
+        email: req.user.email,
+        _id: req.user._id
       }
     });
   }
