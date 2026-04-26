@@ -7,7 +7,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     getProgressStats();
-  }, []);
+  }, [getProgressStats]);
 
   if (loading) return <div className="loading">Loading...</div>;
 

@@ -19,7 +19,7 @@ export default function ProgressReportPage() {
     getProgressStats();
     getSubjectAnalytics();
     getTrendData(timeRange);
-  }, [timeRange]);
+  }, [timeRange, getProgressStats, getSubjectAnalytics, getTrendData]);
 
   if (loading) return <div className="loading">Loading...</div>;
 

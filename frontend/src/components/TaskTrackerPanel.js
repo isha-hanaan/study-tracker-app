@@ -19,7 +19,9 @@ export default function TaskTrackerPanel({ planId }) {
   } = useContext(StudyContext);
 
   useEffect(() => {
-    fetchTasks();
+    if (planId) {
+      fetchTasks();
+    }
   }, [planId]);
 
   const fetchTasks = async () => {
