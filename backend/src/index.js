@@ -27,22 +27,36 @@ app.use((req, res, next) => {
 });
 
 // Connect to MongoDB
+const mongoUri = process.env.MONGODB_URI;
+console.log('Connecting to MongoDB...');
+console.log('MongoDB URI (without password):', mongoUri?.replace(/:[^@]*@/, ':***@') || 'Not set');
+
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
   .then(() => {
-    console.log('MongoDB connected');
+    console.log('✅ MongoDB connected successfully');
   })
   .catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
+    console.error('❌ MongoDB connection error:', err.message);
+    console.error('Full error:', err);
   });
 
 // Health check
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date() });
+});
+
+// Test route
+app.get('/test', (req, res) => {
+  res.status(200).json({ message: 'Backend is working!', timestamp: new Date() });
+});
+
+// Simple route to verify API base path
+app.get('/api/test', (req, res) => {
+  res.status(200).json({ message: 'API endpoint is working!', timestamp: new Date() });
 });
 
 // API routes
