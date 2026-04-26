@@ -14,11 +14,20 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
 
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
     try {
+      console.log('Attempting login with:', email);
       await login(email, password);
+      console.log('Login successful');
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      console.error('Login error:', err);
+      const errorMsg = err.response?.data?.message || err.message || 'Login failed';
+      setError(errorMsg);
     }
   };
 

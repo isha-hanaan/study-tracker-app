@@ -20,6 +20,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Log all incoming requests (before routes)
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
+
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -47,6 +53,7 @@ app.use('/api/progress', progressRoutes);
 
 // 404 handler
 app.use((req, res) => {
+  console.log(`404: Route not found - ${req.method} ${req.path}`);
   res.status(404).json({ message: 'Route not found' });
 });
 
