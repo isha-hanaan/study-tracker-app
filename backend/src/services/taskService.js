@@ -12,7 +12,7 @@ class TaskService {
       throw error;
     }
 
-    if (plan.userId.toString() !== userId) {
+    if (plan.userId.toString() !== userId.toString()) {
       const error = new Error('Not authorized');
       error.statusCode = 403;
       throw error;
@@ -42,7 +42,7 @@ class TaskService {
       throw error;
     }
 
-    if (task.userId.toString() !== userId) {
+    if (task.userId.toString() !== userId.toString()) {
       const error = new Error('Not authorized');
       error.statusCode = 403;
       throw error;
@@ -60,7 +60,7 @@ class TaskService {
       throw error;
     }
 
-    if (plan.userId.toString() !== userId) {
+    if (plan.userId.toString() !== userId.toString()) {
       const error = new Error('Not authorized');
       error.statusCode = 403;
       throw error;
@@ -78,7 +78,7 @@ class TaskService {
       throw error;
     }
 
-    if (task.userId.toString() !== userId) {
+    if (task.userId.toString() !== userId.toString()) {
       const error = new Error('Not authorized');
       error.statusCode = 403;
       throw error;
@@ -106,7 +106,7 @@ class TaskService {
       throw error;
     }
 
-    if (task.userId.toString() !== userId) {
+    if (task.userId.toString() !== userId.toString()) {
       const error = new Error('Not authorized');
       error.statusCode = 403;
       throw error;

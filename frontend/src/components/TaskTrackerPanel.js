@@ -4,7 +4,7 @@ import '../styles/tasktracker.css';
 
 export default function TaskTrackerPanel({ planId }) {
   const [newTask, setNewTask] = useState({
-    subject: '',
+    title: '',
     description: '',
     deadline: '',
     priority: 'medium'
@@ -43,8 +43,8 @@ export default function TaskTrackerPanel({ planId }) {
 
   const handleAddTask = async (e) => {
     e.preventDefault();
-    if (!newTask.subject || !newTask.deadline) {
-      setError('Subject and deadline are required');
+    if (!newTask.title || !newTask.deadline) {
+      setError('Title and deadline are required');
       return;
     }
 
@@ -52,7 +52,7 @@ export default function TaskTrackerPanel({ planId }) {
       setError(null);
       await createTask(planId, newTask);
       setNewTask({
-        subject: '',
+        title: '',
         description: '',
         deadline: '',
         priority: 'medium'
@@ -98,8 +98,8 @@ export default function TaskTrackerPanel({ planId }) {
   };
 
   const handleSaveEdit = async (taskId) => {
-    if (!editData.subject || !editData.deadline) {
-      setError('Subject and deadline are required');
+    if (!editData.title || !editData.deadline) {
+      setError('Title and deadline are required');
       return;
     }
 
@@ -146,10 +146,10 @@ export default function TaskTrackerPanel({ planId }) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
           <input
             type="text"
-            placeholder="Subject *"
-            value={newTask.subject}
+            placeholder="Title *"
+            value={newTask.title}
             onChange={(e) =>
-              setNewTask({ ...newTask, subject: e.target.value })
+              setNewTask({ ...newTask, title: e.target.value })
             }
             required
             disabled={loading}
@@ -202,11 +202,11 @@ export default function TaskTrackerPanel({ planId }) {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                   <input
                     type="text"
-                    value={editData.subject}
+                    value={editData.title}
                     onChange={(e) =>
-                      setEditData({ ...editData, subject: e.target.value })
+                      setEditData({ ...editData, title: e.target.value })
                     }
-                    placeholder="Subject"
+                    placeholder="Title"
                     style={{ padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
                   />
                   <input
@@ -260,7 +260,7 @@ export default function TaskTrackerPanel({ planId }) {
                   <div className="task-content">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '8px' }}>
                       <div>
-                        <h4 style={{ margin: '0 0 5px 0' }}>{task.subject}</h4>
+                        <h4 style={{ margin: '0 0 5px 0' }}>{task.title}</h4>
                         <span style={{ display: 'inline-block', padding: '3px 8px', borderRadius: '3px', fontSize: '12px', fontWeight: 'bold', backgroundColor: task.priority === 'high' ? '#ffcccc' : task.priority === 'medium' ? '#fff4cc' : '#ccf', color: '#333' }}>
                           {task.priority.toUpperCase()}
                         </span>

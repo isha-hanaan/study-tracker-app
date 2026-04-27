@@ -43,12 +43,12 @@ class ProgressService {
 
     const bySubject = {};
     tasks.forEach(task => {
-      if (!bySubject[task.subject]) {
-        bySubject[task.subject] = { total: 0, completed: 0 };
+      if (!bySubject[task.title]) {
+        bySubject[task.title] = { total: 0, completed: 0 };
       }
-      bySubject[task.subject].total += 1;
+      bySubject[task.title].total += 1;
       if (task.status === 'completed') {
-        bySubject[task.subject].completed += 1;
+        bySubject[task.title].completed += 1;
       }
     });
 

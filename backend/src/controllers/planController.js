@@ -34,7 +34,8 @@ class PlanController {
         weekStartDate,
         subjects,
         goals,
-        title
+        title,
+        req.body.weekEndDate
       );
       res.status(201).json(plan);
     } catch (error) {

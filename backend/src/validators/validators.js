@@ -46,6 +46,10 @@ const planValidators = {
     body('weekStartDate')
       .isISO8601()
       .withMessage('Invalid date format'),
+    body('weekEndDate')
+      .optional()
+      .isISO8601()
+      .withMessage('Invalid end date format'),
     body('subjects')
       .custom(value => Array.isArray(value) || typeof value === 'string')
       .withMessage('Subjects must be an array or comma-separated string'),
@@ -73,9 +77,9 @@ const planValidators = {
 
 const taskValidators = {
   createTask: [
-    body('subject')
+    body('title')
       .notEmpty()
-      .withMessage('Subject is required')
+      .withMessage('Title is required')
       .trim(),
     body('description')
       .optional()
@@ -88,10 +92,10 @@ const taskValidators = {
       .withMessage('Priority must be low, medium, or high')
   ],
   updateTask: [
-    body('subject')
+    body('title')
       .optional()
       .notEmpty()
-      .withMessage('Subject cannot be empty')
+      .withMessage('Title cannot be empty')
       .trim(),
     body('description')
       .optional()

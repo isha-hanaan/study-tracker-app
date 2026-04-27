@@ -8,6 +8,9 @@ export default function WeeklyPlannerPage() {
   const [startDate, setStartDate] = useState(
     new Date().toISOString().split('T')[0]
   );
+  const [endDate, setEndDate] = useState(
+    new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+  );
   const [subjects, setSubjects] = useState('');
   const [goals, setGoals] = useState('');
   const [currentPlan, setCurrentPlan] = useState(null);
@@ -56,6 +59,7 @@ export default function WeeklyPlannerPage() {
     try {
       await createPlan({
         weekStartDate: startDate,
+        weekEndDate: endDate,
         subjects: subjectList,
         goals: goalList,
         title: title ? title.trim() : undefined
@@ -98,6 +102,12 @@ export default function WeeklyPlannerPage() {
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
+            />
+
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
             />
 
             <input

@@ -2,10 +2,12 @@ const WeeklyPlan = require('../models/WeeklyPlan');
 const Task = require('../models/Task');
 
 class PlanService {
-  async createPlan(userId, weekStartDate, subjects, goals, title = 'Weekly Plan') {
+  async createPlan(userId, weekStartDate, subjects, goals, title = 'Weekly Plan', weekEndDate = null) {
     const weekStart = new Date(weekStartDate);
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekEnd.getDate() + 6);
+    const weekEnd = weekEndDate ? new Date(weekEndDate) : new Date(weekStart);
+    if (!weekEndDate) {
+      weekEnd.setDate(weekEnd.getDate() + 6);
+    }
 
     // Check if plan already exists for this week
     const existingPlan = await WeeklyPlan.findOne({

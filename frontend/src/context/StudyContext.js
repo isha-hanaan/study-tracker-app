@@ -106,6 +106,8 @@ export const StudyProvider = ({ children }) => {
     try {
       const response = await api.post(`/tasks/plan/${planId}`, taskData);
       setTasks(prev => [response.data, ...prev]);
+      // Refresh progress stats after task creation
+      await getProgressStats();
       return response.data;
     } catch (err) {
       const errorMsg = err.response?.data?.message || 'Failed to create task';
@@ -114,7 +116,7 @@ export const StudyProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [getProgressStats]);
 
   const getTasks = useCallback(async (status = null) => {
     setLoading(true);
@@ -156,6 +158,8 @@ export const StudyProvider = ({ children }) => {
       setTasks(prev =>
         prev.map(t => (t._id === taskId ? response.data : t))
       );
+      // Refresh progress stats after task update
+      await getProgressStats();
       return response.data;
     } catch (err) {
       const errorMsg = err.response?.data?.message || 'Failed to update task';
@@ -164,7 +168,7 @@ export const StudyProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [getProgressStats]);
 
   const deleteTask = useCallback(async (taskId) => {
     setLoading(true);
@@ -172,6 +176,8 @@ export const StudyProvider = ({ children }) => {
     try {
       await api.delete(`/tasks/${taskId}`);
       setTasks(prev => prev.filter(t => t._id !== taskId));
+      // Refresh progress stats after task deletion
+      await getProgressStats();
     } catch (err) {
       const errorMsg = err.response?.data?.message || 'Failed to delete task';
       setError(errorMsg);
@@ -179,7 +185,7 @@ export const StudyProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [getProgressStats]);
 
   // Progress actions
   const getProgressStats = useCallback(async () => {

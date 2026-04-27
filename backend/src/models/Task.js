@@ -12,7 +12,7 @@ const taskSchema = new mongoose.Schema(
       ref: 'User',
       required: true
     },
-    subject: {
+    title: {
       type: String,
       required: true,
       trim: true
