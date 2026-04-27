@@ -99,6 +99,23 @@ export const StudyProvider = ({ children }) => {
     }
   }, []);
 
+  // Progress actions
+  const getProgressStats = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.get('/progress/stats');
+      setProgressStats(response.data);
+      return response.data;
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || 'Failed to fetch stats';
+      setError(errorMsg);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   // Task actions
   const createTask = useCallback(async (planId, taskData) => {
     setLoading(true);
@@ -188,22 +205,6 @@ export const StudyProvider = ({ children }) => {
   }, [getProgressStats]);
 
   // Progress actions
-  const getProgressStats = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await api.get('/progress/stats');
-      setProgressStats(response.data);
-      return response.data;
-    } catch (err) {
-      const errorMsg = err.response?.data?.message || 'Failed to fetch stats';
-      setError(errorMsg);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   const getWeeklyProgress = useCallback(async (weekStartDate) => {
     setLoading(true);
     setError(null);
