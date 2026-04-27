@@ -84,10 +84,10 @@ export default function TaskTrackerPanel({ planId }) {
   const startEdit = (task) => {
     setEditingId(task._id);
     setEditData({
-      subject: task.subject,
-      description: task.description,
-      deadline: task.deadline,
-      priority: task.priority
+      title: task.title || '',
+      description: task.description || '',
+      deadline: task.deadline || '',
+      priority: task.priority || 'medium'
     });
     setError(null);
   };
