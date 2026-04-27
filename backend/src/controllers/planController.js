@@ -3,7 +3,32 @@ const planService = require('../services/planService');
 class PlanController {
   async createPlan(req, res, next) {
     try {
-      const { weekStartDate, subjects, goals, title } = req.body;
+      const { weekStartDate, title } = req.body;
+      const subjects = Array.isArray(req.body.subjects)
+        ? req.body.subjects
+        : String(req.body.subjects || '')
+            .split(',')
+            .map((item) => item.trim())
+            .filter(Boolean);
+      const goals = Array.isArray(req.body.goals)
+        ? req.body.goals
+        : String(req.body.goals || '')
+            .split(',')
+            .map((item) => item.trim())
+            .filter(Boolean);
+
+      if (!subjects.length) {
+        const error = new Error('Please provide at least one subject');
+        error.statusCode = 400;
+        throw error;
+      }
+
+      if (!goals.length) {
+        const error = new Error('Please provide at least one goal');
+        error.statusCode = 400;
+        throw error;
+      }
+
       const plan = await planService.createPlan(
         req.user._id,
         weekStartDate,

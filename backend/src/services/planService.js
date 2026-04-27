@@ -20,13 +20,20 @@ class PlanService {
       throw error;
     }
 
+    const normalizedSubjects = Array.isArray(subjects)
+      ? subjects.map((s) => String(s).trim()).filter(Boolean)
+      : [];
+    const normalizedGoals = Array.isArray(goals)
+      ? goals.map((g) => String(g).trim()).filter(Boolean)
+      : [];
+
     const plan = new WeeklyPlan({
       userId,
       weekStartDate: weekStart,
       weekEndDate: weekEnd,
       title,
-      subjects,
-      goals
+      subjects: normalizedSubjects,
+      goals: normalizedGoals
     });
 
     await plan.save();

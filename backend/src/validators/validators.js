@@ -47,11 +47,11 @@ const planValidators = {
       .isISO8601()
       .withMessage('Invalid date format'),
     body('subjects')
-      .isArray()
-      .withMessage('Subjects must be an array'),
+      .custom(value => Array.isArray(value) || typeof value === 'string')
+      .withMessage('Subjects must be an array or comma-separated string'),
     body('goals')
-      .isArray()
-      .withMessage('Goals must be an array')
+      .custom(value => Array.isArray(value) || typeof value === 'string')
+      .withMessage('Goals must be an array or comma-separated string')
   ],
   updatePlan: [
     body('title')

@@ -48,6 +48,11 @@ export default function WeeklyPlannerPage() {
       return;
     }
 
+    if (!goalList.length) {
+      setSubmitError('Please enter at least one goal');
+      return;
+    }
+
     try {
       await createPlan({
         weekStartDate: startDate,
