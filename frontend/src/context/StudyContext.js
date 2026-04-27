@@ -14,14 +14,15 @@ export const StudyProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   // Plan actions
-  const createPlan = useCallback(async (weekStartDate, subjects, goals) => {
+  const createPlan = useCallback(async ({ weekStartDate, subjects, goals, title }) => {
     setLoading(true);
     setError(null);
     try {
       const response = await api.post('/plans', {
         weekStartDate,
         subjects,
-        goals
+        goals,
+        title
       });
       setPlans(prev => [response.data, ...prev]);
       return response.data;

@@ -7,6 +7,11 @@ const weeklyPlanSchema = new mongoose.Schema(
       ref: 'User',
       required: true
     },
+    title: {
+      type: String,
+      trim: true,
+      default: 'Weekly Plan'
+    },
     weekStartDate: {
       type: Date,
       required: true

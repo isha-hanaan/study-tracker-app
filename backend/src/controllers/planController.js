@@ -3,12 +3,13 @@ const planService = require('../services/planService');
 class PlanController {
   async createPlan(req, res, next) {
     try {
-      const { weekStartDate, subjects, goals } = req.body;
+      const { weekStartDate, subjects, goals, title } = req.body;
       const plan = await planService.createPlan(
         req.user._id,
         weekStartDate,
         subjects,
-        goals
+        goals,
+        title
       );
       res.status(201).json(plan);
     } catch (error) {

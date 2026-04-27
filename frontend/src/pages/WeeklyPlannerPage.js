@@ -27,8 +27,8 @@ export default function WeeklyPlannerPage() {
 
   useEffect(() => {
     const found = plans.find(p => {
-      const start = new Date(p.startDate).toISOString().split('T')[0];
-      const end = new Date(p.endDate).toISOString().split('T')[0];
+      const start = new Date(p.weekStartDate).toISOString().split('T')[0];
+      const end = new Date(p.weekEndDate).toISOString().split('T')[0];
       return startDate >= start && startDate <= end;
     });
 
@@ -43,18 +43,17 @@ export default function WeeklyPlannerPage() {
     const subjectList = subjects.split(',').map(s => s.trim()).filter(Boolean);
     const goalList = goals.split(',').map(g => g.trim()).filter(Boolean);
 
-    if (!title) {
-      setSubmitError('Title is required');
+    if (!subjectList.length) {
+      setSubmitError('Please enter at least one subject');
       return;
     }
 
     try {
       await createPlan({
-        title,
-        startDate,
-        endDate: startDate, // simple same-day plan for now
+        weekStartDate: startDate,
         subjects: subjectList,
-        goals: goalList
+        goals: goalList,
+        title: title ? title.trim() : undefined
       });
 
       setTitle('');
@@ -64,7 +63,8 @@ export default function WeeklyPlannerPage() {
 
       await getPlans();
     } catch (err) {
-      setSubmitError('Failed to create plan');
+      const errorMessage = err.response?.data?.message || 'Failed to create plan';
+      setSubmitError(errorMessage);
     }
   };
 
@@ -121,9 +121,9 @@ export default function WeeklyPlannerPage() {
 
           {currentPlan ? (
             <>
-              <p><strong>{currentPlan.title}</strong></p>
+              {currentPlan.title && <p><strong>{currentPlan.title}</strong></p>}
               <p>
-                {new Date(currentPlan.startDate).toLocaleDateString()}
+                {new Date(currentPlan.weekStartDate).toLocaleDateString()} - {new Date(currentPlan.weekEndDate).toLocaleDateString()}
               </p>
 
               <TaskTrackerPanel planId={currentPlan._id} />

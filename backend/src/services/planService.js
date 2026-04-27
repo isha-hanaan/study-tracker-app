@@ -2,7 +2,7 @@ const WeeklyPlan = require('../models/WeeklyPlan');
 const Task = require('../models/Task');
 
 class PlanService {
-  async createPlan(userId, weekStartDate, subjects, goals) {
+  async createPlan(userId, weekStartDate, subjects, goals, title = 'Weekly Plan') {
     const weekStart = new Date(weekStartDate);
     const weekEnd = new Date(weekStart);
     weekEnd.setDate(weekEnd.getDate() + 6);
@@ -24,6 +24,7 @@ class PlanService {
       userId,
       weekStartDate: weekStart,
       weekEndDate: weekEnd,
+      title,
       subjects,
       goals
     });

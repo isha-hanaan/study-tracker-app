@@ -37,6 +37,12 @@ const authValidators = {
 
 const planValidators = {
   createPlan: [
+    body('title')
+      .optional()
+      .isString()
+      .trim()
+      .isLength({ max: 100 })
+      .withMessage('Title must be a string with max 100 characters'),
     body('weekStartDate')
       .isISO8601()
       .withMessage('Invalid date format'),
@@ -48,6 +54,12 @@ const planValidators = {
       .withMessage('Goals must be an array')
   ],
   updatePlan: [
+    body('title')
+      .optional()
+      .isString()
+      .trim()
+      .isLength({ max: 100 })
+      .withMessage('Title must be a string with max 100 characters'),
     body('subjects')
       .optional()
       .isArray()
